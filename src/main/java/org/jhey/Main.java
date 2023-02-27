@@ -1,6 +1,6 @@
 package org.jhey;
 
-import org.jhey.nsa.pages.LoginPage;
+import org.jhey.nsa.TokenGrabber;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 public class Main {
@@ -8,7 +8,7 @@ public class Main {
       System.setProperty("webdriver.chrome.driver", "src/drive/chromedriver.exe");
       ChromeDriver chromeDriver = new ChromeDriver();
       chromeDriver.get("https://nsa.cps.sp.gov.br/");
-      LoginPage loginPage = new LoginPage(chromeDriver);
-      loginPage.login();
+      TokenGrabber tokenGrabber = new TokenGrabber().setWebDriver(chromeDriver);
+      System.out.println(tokenGrabber.getUserToken());
    }
 }
