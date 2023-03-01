@@ -4,6 +4,8 @@ package org.jhey.nsa.pages;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.jhey.captcha_breaker.stt.html.elements.captcha.Captcha;
 import org.jhey.captcha_breaker.stt.selenium.captcha.CaptchaFinder;
+import org.openqa.selenium.Cookie;
+import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -24,7 +26,6 @@ public class LoginPage extends NsaPage {
       public LoginPage(WebDriver webDriver) {
             super(webDriver);
             PageFactory.initElements(webDriver, this);
-
             this.captcha = CaptchaFinder.findCaptchaElement(webDriver);
 
       }
@@ -38,9 +39,17 @@ public class LoginPage extends NsaPage {
            this.userId.sendKeys(ETEC_USER_ID);
            this.userPass.sendKeys(ETEC_PASS);
       }
-      public void login(){
+      public Login login(){
             insertStudentAccountInfo();
             captcha.solveCaptcha();
             loginButton.click();
+            return new Login();
+      }
+      public class Login{
+            public String getToken() {
+                  return getWebDriver().manage().getCookies().stream().filter(cookie -> cookie.getName().equals("NSA_OnLine_SessionId"))
+                          .findFirst().map(Cookie::getValue).orElseThrow(() -> new NotFoundException("Cookie token not found"));
+            }
+
       }
 }
