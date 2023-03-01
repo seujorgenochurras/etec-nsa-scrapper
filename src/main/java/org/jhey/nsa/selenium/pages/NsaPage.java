@@ -1,4 +1,4 @@
-package org.jhey.nsa.pages;
+package org.jhey.nsa.selenium.pages;
 
 import org.openqa.selenium.WebDriver;
 

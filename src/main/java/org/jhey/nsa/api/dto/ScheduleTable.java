@@ -1,2 +1,5 @@
-package org.jhey.nsa.api.dto;public class ScheduleTable {
+package org.jhey.nsa.api.dto;
+
+public class ScheduleTable {
+
 }
