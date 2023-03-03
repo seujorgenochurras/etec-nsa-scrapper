@@ -1,5 +1,6 @@
 package org.jhey.nsa.api.model.schedule_classes;
 
+import javax.lang.model.element.Element;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,9 @@ public class WeekSchedule {
 
    public List<Lesson> getLessons() {
       return lessons;
+   }
+   public void addLesson(Lesson lesson){
+      getLessons().add(lesson);
    }
 
    public WeekSchedule setLessons(List<Lesson> lessons) {

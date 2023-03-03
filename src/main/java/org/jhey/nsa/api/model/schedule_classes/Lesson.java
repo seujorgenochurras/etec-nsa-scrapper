@@ -11,11 +11,27 @@ public class Lesson {
 //   private Subject subject;
 //   private DayOfWeek dayOfWeek;
 //   private LocalTime startTime;
-   int start;
+   private int start;
    private String teacher;
    private String subject;
    private String dayOfWeek;
    private String startTime;
+
+   /**
+    * From A1 to I5
+    * Where letter = startTime
+    * and number = day of the week
+    * */
+   private String place;
+
+   public String getPlace() {
+      return place;
+   }
+
+   public Lesson setPlace(String place) {
+      this.place = place;
+      return this;
+   }
 
    public int getStart() {
       return start;

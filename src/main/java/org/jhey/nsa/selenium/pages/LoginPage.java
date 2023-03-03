@@ -50,6 +50,13 @@ public class LoginPage extends NsaPage {
                   return getWebDriver().manage().getCookies().stream().filter(cookie -> cookie.getName().equals("NSA_OnLine_SessionId"))
                           .findFirst().map(Cookie::getValue).orElseThrow(() -> new NotFoundException("Cookie token not found"));
             }
-
+            public String getARRAffinity(){
+                  return getWebDriver().manage().getCookies().stream().filter(cookie -> cookie.getName().equals("ARRAffinity"))
+                          .findFirst().map(Cookie::getValue).orElseThrow(() -> new NotFoundException("Cookie token not found"));
+            }
+            public String getARRAffinitySameSite(){
+                  return getWebDriver().manage().getCookies().stream().filter(cookie -> cookie.getName().equals("ARRAffinitySameSite"))
+                          .findFirst().map(Cookie::getValue).orElseThrow(() -> new NotFoundException("Cookie token not found"));
+            }
       }
 }
