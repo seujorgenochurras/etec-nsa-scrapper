@@ -21,7 +21,7 @@ public class LoginPage extends NsaPage {
       private WebElement userId;
       @FindBy(id = "txtSenha")
       private WebElement userPass;
-      Captcha captcha;
+      private final Captcha captcha;
 
       public LoginPage(WebDriver webDriver) {
             super(webDriver);
@@ -52,11 +52,11 @@ public class LoginPage extends NsaPage {
             }
             public String getARRAffinity(){
                   return getWebDriver().manage().getCookies().stream().filter(cookie -> cookie.getName().equals("ARRAffinity"))
-                          .findFirst().map(Cookie::getValue).orElseThrow(() -> new NotFoundException("Cookie token not found"));
+                          .findFirst().map(Cookie::getValue).orElseThrow(() -> new NotFoundException("Cookie ARRAffinity not found"));
             }
             public String getARRAffinitySameSite(){
                   return getWebDriver().manage().getCookies().stream().filter(cookie -> cookie.getName().equals("ARRAffinitySameSite"))
-                          .findFirst().map(Cookie::getValue).orElseThrow(() -> new NotFoundException("Cookie token not found"));
+                          .findFirst().map(Cookie::getValue).orElseThrow(() -> new NotFoundException("Cookie ARRAffinitySameSite not found"));
             }
       }
 }

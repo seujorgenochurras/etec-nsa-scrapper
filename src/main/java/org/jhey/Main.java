@@ -1,22 +1,28 @@
 package org.jhey;
 
-import org.jhey.nsa.api.request.Requester;
-import org.jhey.nsa.api.request.Transcriber;
-import org.jhey.nsa.selenium.pages.LoginPage;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.jhey.nsa.request.Requester;
+import org.jhey.nsa.request.Transcriber;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
 
+@SpringBootApplication
 public class Main {
-   public static void main(String[] args) throws IOException, InterruptedException {
+
+   @Autowired
+   static Transcriber transcriber = new Transcriber();
+   public static void main(String[] args) throws IOException {
 //      System.setProperty("webdriver.chrome.driver", "src/drive/chromedriver.exe");
 //      ChromeDriver chromeDriver = new ChromeDriver();
 //      chromeDriver.get("https://nsa.cps.sp.gov.br/");
-
+//
 //      LoginPage loginPage = new LoginPage(chromeDriver);
+      SpringApplication.run(Main.class, args);
 
       Requester requester = new Requester(null);
-      Transcriber transcriber = new Transcriber();
+
       transcriber.transcribe(requester.getSchedulePage());
    }
 }
