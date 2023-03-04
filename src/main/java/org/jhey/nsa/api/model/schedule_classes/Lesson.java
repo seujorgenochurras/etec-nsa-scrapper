@@ -1,44 +1,32 @@
 package org.jhey.nsa.api.model.schedule_classes;
 
-import org.jhey.nsa.api.model.Subject;
-import org.jhey.nsa.api.model.Teacher;
-
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 public class Lesson {
 //   private Teacher teacher;
 //   private Subject subject;
-//   private DayOfWeek dayOfWeek;
-//   private LocalTime startTime;
-   private int start;
+
    private String teacher;
    private String subject;
-   private String dayOfWeek;
-   private String startTime;
+   private DayOfWeek dayOfWeek;
+   private LocalTime startTime;
 
    /**
     * From A1 to I5
     * Where letter = startTime
     * and number = day of the week
     * */
-   private String place;
+   private PositionMapping place;
 
-   public String getPlace() {
+   public PositionMapping getPlace() {
       return place;
    }
 
-   public Lesson setPlace(String place) {
+   public Lesson setPlace(PositionMapping place) {
       this.place = place;
-      return this;
-   }
-
-   public int getStart() {
-      return start;
-   }
-
-   public Lesson setStart(int start) {
-      this.start = start;
+      this.dayOfWeek = place.getDayOfWeek();
+      this.startTime = place.getStartTime();
       return this;
    }
 
@@ -60,23 +48,14 @@ public class Lesson {
       return this;
    }
 
-   public String getDayOfWeek() {
+   public DayOfWeek getDayOfWeek() {
       return dayOfWeek;
    }
 
-   public Lesson setDayOfWeek(String dayOfWeek) {
-      this.dayOfWeek = dayOfWeek;
-      return this;
-   }
-
-   public String getStartTime() {
+   public LocalTime getStartTime() {
       return startTime;
    }
 
-   public Lesson setStartTime(String startTime) {
-      this.startTime = startTime;
-      return this;
-   }
 //   public Teacher getTeacher() {
 //      return teacher;
 //   }
@@ -104,7 +83,7 @@ public class Lesson {
 //      return this;
 //   }
 //
-////   public LocalTime getStartTime() {
+////   public LocalTimeAdapter getStartTime() {
 ////      return startTime;
 ////   }
 //
