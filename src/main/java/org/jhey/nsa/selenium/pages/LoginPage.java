@@ -1,9 +1,11 @@
-package org.jhey.nsa.pages;
+package org.jhey.nsa.selenium.pages;
 
 
 import io.github.cdimascio.dotenv.Dotenv;
 import org.jhey.captcha_breaker.stt.html.elements.captcha.Captcha;
 import org.jhey.captcha_breaker.stt.selenium.captcha.CaptchaFinder;
+import org.openqa.selenium.Cookie;
+import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -19,12 +21,11 @@ public class LoginPage extends NsaPage {
       private WebElement userId;
       @FindBy(id = "txtSenha")
       private WebElement userPass;
-      Captcha captcha;
+      private final Captcha captcha;
 
       public LoginPage(WebDriver webDriver) {
             super(webDriver);
             PageFactory.initElements(webDriver, this);
-
             this.captcha = CaptchaFinder.findCaptchaElement(webDriver);
 
       }
@@ -34,13 +35,30 @@ public class LoginPage extends NsaPage {
             final String ETEC_ID = dotenv.get("ETEC_ID");
             final String ETEC_USER_ID = dotenv.get("ETEC_USER_ID");
             final String ETEC_PASS = dotenv.get("ETEC_PASS");
-           this.etecId.sendKeys(ETEC_ID);
-           this.userId.sendKeys(ETEC_USER_ID);
-           this.userPass.sendKeys(ETEC_PASS);
+            this.etecId.sendKeys(ETEC_ID);
+            this.userId.sendKeys(ETEC_USER_ID);
+            this.userPass.sendKeys(ETEC_PASS);
       }
-      public void login(){
+      public Login login(){
             insertStudentAccountInfo();
             captcha.solveCaptcha();
             loginButton.click();
+
+            return new Login();
+      }
+      public class Login{
+            public final String tokenCookie;
+            public final String arrAffinityCookie;
+            public final String arrAffinitySameSiteCookie;
+            public Login(){
+                 this.tokenCookie = getCookie("NSA_OnLine_SessionId");
+                 this.arrAffinitySameSiteCookie = getCookie("ARRAffinitySameSite");
+                 this.arrAffinityCookie = getCookie("ARRAffinity");
+            }
+
+            private String getCookie(String cookieName){
+                  return getWebDriver().manage().getCookies().stream().filter(cookie -> cookie.getName().equals(cookieName))
+                          .findFirst().map(Cookie::getValue).orElseThrow(() -> new NotFoundException("Cookie " + cookieName + " not found"));
+            }
       }
 }
