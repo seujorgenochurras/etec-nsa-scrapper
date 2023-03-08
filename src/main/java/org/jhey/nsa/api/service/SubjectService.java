@@ -13,10 +13,10 @@ import java.nio.charset.StandardCharsets;
 public class SubjectService {
 
    @Autowired
-  private SubjectRepository subjectRepository;
+   private SubjectRepository subjectRepository;
 
    public Subject getSubjectByName(String name) {
-      String parsedName = new String(name.getBytes(), StandardCharsets.UTF_8);
-      return subjectRepository.findByName(StringUtils.unaccent(parsedName)).orElseThrow(() -> new NotFoundException("Subject ".concat(StringUtils.unaccent(parsedName)).concat(" not found")));
+      final String parsedName = StringUtils.unaccent(new String(name.getBytes(), StandardCharsets.UTF_8));
+      return subjectRepository.findByName(parsedName).orElseThrow(() -> new NotFoundException("Subject " + parsedName + " not found"));
    }
 }

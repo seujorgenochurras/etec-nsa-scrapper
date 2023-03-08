@@ -4,12 +4,10 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.jhey.nsa.api.model.schedule_classes.DailySchedule;
 import org.jhey.nsa.api.repository.DailyScheduleRepository;
-import org.jhey.nsa.api.repository.LessonRepository;
 import org.jhey.nsa.request.Requester;
 import org.jhey.nsa.request.Transcriber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 
 @Service
@@ -51,7 +49,6 @@ public class DailyScheduleService {
 
    @Transactional
    public DailySchedule save(@Valid DailySchedule dailySchedule){
-      //dailySchedule.getLessons().forEach(lesson -> lessonService.save(lesson));
       return scheduleRepository.save(dailySchedule);
    }
 
