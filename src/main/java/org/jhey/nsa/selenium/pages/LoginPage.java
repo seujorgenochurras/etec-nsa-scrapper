@@ -35,28 +35,30 @@ public class LoginPage extends NsaPage {
             final String ETEC_ID = dotenv.get("ETEC_ID");
             final String ETEC_USER_ID = dotenv.get("ETEC_USER_ID");
             final String ETEC_PASS = dotenv.get("ETEC_PASS");
-           this.etecId.sendKeys(ETEC_ID);
-           this.userId.sendKeys(ETEC_USER_ID);
-           this.userPass.sendKeys(ETEC_PASS);
+            this.etecId.sendKeys(ETEC_ID);
+            this.userId.sendKeys(ETEC_USER_ID);
+            this.userPass.sendKeys(ETEC_PASS);
       }
       public Login login(){
             insertStudentAccountInfo();
             captcha.solveCaptcha();
             loginButton.click();
+
             return new Login();
       }
       public class Login{
-            public String getToken() {
-                  return getWebDriver().manage().getCookies().stream().filter(cookie -> cookie.getName().equals("NSA_OnLine_SessionId"))
-                          .findFirst().map(Cookie::getValue).orElseThrow(() -> new NotFoundException("Cookie token not found"));
+            public final String tokenCookie;
+            public final String arrAffinityCookie;
+            public final String arrAffinitySameSiteCookie;
+            public Login(){
+                 this.tokenCookie = getCookie("NSA_OnLine_SessionId");
+                 this.arrAffinitySameSiteCookie = getCookie("ARRAffinitySameSite");
+                 this.arrAffinityCookie = getCookie("ARRAffinity");
             }
-            public String getARRAffinity(){
-                  return getWebDriver().manage().getCookies().stream().filter(cookie -> cookie.getName().equals("ARRAffinity"))
-                          .findFirst().map(Cookie::getValue).orElseThrow(() -> new NotFoundException("Cookie ARRAffinity not found"));
-            }
-            public String getARRAffinitySameSite(){
-                  return getWebDriver().manage().getCookies().stream().filter(cookie -> cookie.getName().equals("ARRAffinitySameSite"))
-                          .findFirst().map(Cookie::getValue).orElseThrow(() -> new NotFoundException("Cookie ARRAffinitySameSite not found"));
+
+            private String getCookie(String cookieName){
+                  return getWebDriver().manage().getCookies().stream().filter(cookie -> cookie.getName().equals(cookieName))
+                          .findFirst().map(Cookie::getValue).orElseThrow(() -> new NotFoundException("Cookie " + cookieName + " not found"));
             }
       }
 }

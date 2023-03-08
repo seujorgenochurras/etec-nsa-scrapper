@@ -8,7 +8,9 @@ public class Subject {
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
-  private String name;
+
+   @Column(name = "name")
+   private String name;
 
    public String getName() {
       return name;
@@ -16,6 +18,15 @@ public class Subject {
 
    public Subject setName(String name) {
       this.name = name;
+      return this;
+   }
+
+   public Long getId() {
+      return id;
+   }
+
+   public Subject setId(Long id) {
+      this.id = id;
       return this;
    }
 }

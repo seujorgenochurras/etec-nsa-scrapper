@@ -12,7 +12,7 @@ public class TeacherService {
    @Autowired
    private TeacherRepository teacherRepository;
 
-   public Teacher getTeacherByName(String name) {
-      return teacherRepository.findByName(name).orElseThrow(() -> new NotFoundException("Teacher not found"));
+   public Teacher getTeacherByName(final String name) {
+      return teacherRepository.findByName(name).orElseThrow(() -> new NotFoundException("Teacher " + name + " not found"));
    }
 }

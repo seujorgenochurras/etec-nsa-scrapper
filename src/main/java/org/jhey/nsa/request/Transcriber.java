@@ -1,41 +1,33 @@
 package org.jhey.nsa.request;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.jhey.nsa.api.model.schedule_classes.Lesson;
 import org.jhey.nsa.api.model.schedule_classes.PositionMapping;
 import org.jhey.nsa.api.model.schedule_classes.DailySchedule;
-import org.jhey.nsa.api.model.schedule_classes.time.LocalTimeAdapter;
-import org.jhey.nsa.api.service.LessonService;
 import org.jhey.nsa.api.service.SubjectService;
 import org.jhey.nsa.api.service.TeacherService;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 
-@Component
+@Service
 public class Transcriber {
-
    @Autowired
    private TeacherService teacherService;
    @Autowired
    private SubjectService subjectService;
-   @Autowired
-   private LessonService lessonService;
 
-   public void transcribe(Document document) {
+   public DailySchedule transcribe(Document document) {
       Element scheduleTable = document.selectXpath("//*[@id=\"ctl00_ContentPlaceHolder1_gvHorario\"]/tbody").first();
       Elements schedulesTableRows = scheduleTable.getElementsByTag("tr").next();
-      DailySchedule dailySchedule = new DailySchedule();
 
+      DailySchedule dailySchedule = new DailySchedule().setLookupDate(LocalDate.now());
       AtomicInteger atomicInteger = new AtomicInteger(0);
       schedulesTableRows.forEach(row -> {
 
@@ -49,9 +41,10 @@ public class Transcriber {
                        .setTeacher(null)
                        .setPlace(PositionMapping.getByIndex(atomicInteger.getAndIncrement()))
                        .setSubject(subjectService.getSubjectByName(data.text()))
-                       .setLookupWeek(LocalDate.now())
                );
-               lessonService.save(lesson.get());
+               lesson.get().setDailySchedule(dailySchedule);
+               dailySchedule.addLesson(lesson.get());
+              // lessonService.save(lesson.get());
             }
             //<a> is the subject
             else if(data.tagName().equals("a")){
@@ -63,17 +56,18 @@ public class Transcriber {
               // This is only the <span> and contains the Teacher data
                        lesson.set(lesson.get()
                                .setPlace(PositionMapping.getByIndex(atomicInteger.getAndIncrement()))
-                               .setLookupWeek(LocalDate.now())
                                .setTeacher(teacherService.getTeacherByName(data.text())));
-               lessonService.save(lesson.get());
+            //   lessonService.save(lesson.get());
+               lesson.get().setDailySchedule(dailySchedule);
+               dailySchedule.addLesson(lesson.get());
             }
 
          });
       });
-
-      Gson gson = new GsonBuilder()
-              .registerTypeAdapter(LocalTime.class, new LocalTimeAdapter())
-              .create();
-      System.out.println(gson.toJson(dailySchedule));
+      return dailySchedule;
+//      Gson gson = new GsonBuilder()
+//              .registerTypeAdapter(LocalTime.class, new LocalTimeAdapter())
+//              .create();
+//      System.out.println(gson.toJson(dailySchedule));
    }
 }

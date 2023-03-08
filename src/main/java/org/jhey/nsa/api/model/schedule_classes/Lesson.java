@@ -1,11 +1,13 @@
 package org.jhey.nsa.api.model.schedule_classes;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.Cascade;
 import org.jhey.nsa.api.model.Subject;
 import org.jhey.nsa.api.model.Teacher;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.LocalTime;
 
 
@@ -15,36 +17,48 @@ public class Lesson {
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private long id;
+   @Valid
+   @Nullable
    @OneToOne
-   @JoinColumn(name = "teacher_fk")
+   @JoinColumn(name = "teacher_fk", referencedColumnName = "id")
    private Teacher teacher;
 
+   @Valid
+   @NotNull
    @OneToOne
-   @JoinColumn(name = "subject_fk")
+   @JoinColumn(name = "subject_fk", referencedColumnName = "id")
    private Subject subject;
 
-   @Column(name = "dayOfWeek")
-   private DayOfWeek dayOfWeek;
+   @Column(name = "day_of_week")
+   @NotNull
+   private String dayOfWeek;
    @Column(name = "start_time")
+   @NotNull
    private LocalTime startTime;
-   public Lesson() {
-   }
+
+   @ManyToOne
+   @JoinColumn(name = "week_fk", referencedColumnName = "id")
+   @NotNull
+   @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+   @Valid
+   private DailySchedule dailySchedule;
 
    /**
     * From A1 to I5
     * Where letter = startTime
     * and number = day of the week
     * */
-   private PositionMapping place;
+   @Column(name = "place")
+   private String place;
 
-   public PositionMapping getPlace() {
+   public String getPlace() {
       return place;
    }
 
    public Lesson setPlace(PositionMapping place) {
-      this.place = place;
-      this.dayOfWeek = place.getDayOfWeek();
-      this.startTime = place.getStartTime();
+      this.place = place.toString();
+      this.dayOfWeek = place.getDayOfWeek().name();
+      this.startTime = place.getStartTime(); //For some reason the db
       return this;
    }
 
@@ -58,7 +72,7 @@ public class Lesson {
       return this;
    }
 
-   public DayOfWeek getDayOfWeek() {
+   public String getDayOfWeek() {
       return dayOfWeek;
    }
 
@@ -66,13 +80,13 @@ public class Lesson {
       return startTime;
    }
 
-   public Lesson(long id, Teacher teacher, Subject subject, DayOfWeek dayOfWeek, LocalTime startTime, LocalDate lookupWeek, PositionMapping place) {
-      this.id = id;
-      this.teacher = teacher;
-      this.subject = subject;
-      this.dayOfWeek = dayOfWeek;
-      this.startTime = startTime;
-      this.place = place;
+   public DailySchedule getDailySchedule() {
+      return dailySchedule;
+   }
+
+   public Lesson setDailySchedule(DailySchedule dailySchedule) {
+      this.dailySchedule = dailySchedule;
+      return this;
    }
 }
 
