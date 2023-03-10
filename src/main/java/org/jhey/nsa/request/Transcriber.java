@@ -51,18 +51,13 @@ public class Transcriber {
                if(elementIdentifiers.equals(ElementIdentifiers.CANCELLED_CLASS)){
                   lesson.get().setTeacher(null);
 
-               } else {
-                  lesson.get().setTeacher(teacherService.getTeacherByName(data.text()));
                }
-
                lesson.get().setDailySchedule(dailySchedule);
                dailySchedule.addLesson(lesson.get());
             }
-            //<a> is the subject
+
             else {
-               lesson.set(new Lesson()
-                       .setSubject(subjectService.getSubjectByName(data.text()))
-               );
+               lesson.get().setTeacher(teacherService.getTeacherByName(data.text()));
              }
          });
       });
@@ -78,10 +73,10 @@ public class Transcriber {
       return element.tagName().equals("span") && element.text().startsWith("Sem aula no hor");
    }
    private boolean isElementIdentifyingATeacher(Element element){
-      return !isElementIdentifyingASubject(element);
+      return !isElementIdentifyingASubject(element) && element.tagName().equals("span");
    }
    private boolean isElementIdentifyingASubject(Element element){
-      return  !isElementIdentifyingCancelledClass(element) && element.tagName().equals("span");
+      return  element.tagName().equals("a");
    }
     private enum ElementIdentifiers {
        TEACHER,
