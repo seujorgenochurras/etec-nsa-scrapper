@@ -33,9 +33,9 @@ public class Requester {
          //Need to parse because of Brazil chars such as "ç~éà"
          Document document = Jsoup.parse(new String(connection.execute().bodyAsBytes()), "UTF-8");
          System.out.println(document);
-         if(document.body().getElementsByClass("MsoNormal").tagName("strong").hasText()) {
+         if(!document.body().getElementsByClass("MsoNormal").isEmpty()) {
             sleep(110); //This is used just to prevent some StackOverFlow Errors
-            getSchedulePage();
+            return getSchedulePage();
          }
          return document;
 
