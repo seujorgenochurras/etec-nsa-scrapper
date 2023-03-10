@@ -14,7 +14,6 @@ public class LessonService {
 
    @Transactional
    public Lesson save(Lesson lesson){
-      System.out.println("a");
       return lessonRepository.save(lesson);
    }
 }

@@ -1,7 +1,6 @@
 package org.jhey.nsa.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.jhey.nsa.api.model.schedule_classes.Lesson;
 
