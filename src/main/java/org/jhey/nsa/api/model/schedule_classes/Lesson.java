@@ -1,5 +1,7 @@
 package org.jhey.nsa.api.model.schedule_classes;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
@@ -21,17 +23,20 @@ public class Lesson {
    @Nullable
    @OneToOne
    @JoinColumn(name = "teacher_fk", referencedColumnName = "id")
+   @JsonInclude
    private Teacher teacher;
 
    @Valid
    @NotNull
    @OneToOne
    @JoinColumn(name = "subject_fk", referencedColumnName = "id")
+   @JsonInclude
    private Subject subject;
 
    @Column(name = "day_of_week")
    @NotNull
    private String dayOfWeek;
+
    @Column(name = "start_time")
    @NotNull
    private LocalTime startTime;
@@ -41,6 +46,7 @@ public class Lesson {
    @NotNull
    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
    @Valid
+   @JsonIgnore
    private DailySchedule dailySchedule;
 
    /**

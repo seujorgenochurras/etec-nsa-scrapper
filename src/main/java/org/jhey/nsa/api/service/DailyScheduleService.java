@@ -1,11 +1,14 @@
 package org.jhey.nsa.api.service;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.jhey.nsa.api.model.schedule_classes.DailySchedule;
 import org.jhey.nsa.api.repository.DailyScheduleRepository;
 import org.jhey.nsa.request.Requester;
 import org.jhey.nsa.request.Transcriber;
+import org.jhey.nsa.selenium.pages.LoginPage;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +17,13 @@ import org.springframework.stereotype.Service;
 public class DailyScheduleService {
    @Autowired
    private DailyScheduleRepository scheduleRepository;
+
    @Autowired
    private LessonService lessonService;
+
    @Autowired
    private Transcriber transcriber;
 
-   @Transactional
    public boolean hasChangedSinceLastSchedule(DailySchedule dailySchedule){
       return !dailySchedule.equals(scheduleRepository.findFirstByOrderByIdDesc());
    }
@@ -29,22 +33,27 @@ public class DailyScheduleService {
      return checkForScheduleChanges();
    }
 
+   private DailySchedule requestLatestSchedule(){
+      ChromeDriver chromeDriver = new ChromeDriver();
+
+      chromeDriver.get(Dotenv.load().get("SCHOOL_URL"));
+
+      LoginPage loginPage = new LoginPage(chromeDriver);
+
+      Requester requester = new Requester(loginPage.login());
+      DailySchedule dailySchedule = transcriber.transcribe(requester.getSchedulePage());
+
+      chromeDriver.close();
+      return dailySchedule;
+   }
    @Transactional
    private DailySchedule checkForScheduleChanges(){
-//      ChromeDriver chromeDriver = new ChromeDriver();
-//
-//      chromeDriver.get(Dotenv.load().get("SCHOOL_URL"));
-//      LoginPage loginPage = new LoginPage(chromeDriver);
 
-     Requester requester = new Requester(null);
-     DailySchedule latestFetchedSchedule = transcriber.transcribe(requester.getSchedulePage());
+      DailySchedule latestFetchedSchedule = requestLatestSchedule();
 
       boolean hasChanged = hasChangedSinceLastSchedule(latestFetchedSchedule);
 
-      if(hasChanged){
-         return save(latestFetchedSchedule);
-      }
-      return latestFetchedSchedule;
+      return hasChanged ? save(latestFetchedSchedule) : latestFetchedSchedule;
    }
 
    @Transactional

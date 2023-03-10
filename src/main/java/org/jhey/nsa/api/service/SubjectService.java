@@ -16,7 +16,8 @@ public class SubjectService {
    private SubjectRepository subjectRepository;
 
    public Subject getSubjectByName(String name) {
-      final String parsedName = StringUtils.unaccent(new String(name.getBytes(), StandardCharsets.UTF_8));
+      name = new String(name.getBytes(), StandardCharsets.UTF_8);
+      final String parsedName = StringUtils.unaccent(name);
       return subjectRepository.findByName(parsedName).orElseThrow(() -> new NotFoundException("Subject " + parsedName + " not found"));
    }
 }

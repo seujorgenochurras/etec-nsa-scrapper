@@ -12,12 +12,16 @@ public final class StringUtils {
       STRINGS_THAT_CONVERTER_DOESNT_CATCH.put("Qum", "Quim");
    }
       private StringUtils(){}
-   public static String unaccent(String string) {
-         string = Normalizer.normalize(string, Normalizer.Form.NFD);
-         string = string.replaceAll("[^\\p{ASCII}]", "");
+
+   /**
+    * Removes all the accents (çãéì)
+    * */
+   public static String unaccent(String word) {
+         word = Normalizer.normalize(word, Normalizer.Form.NFD);
+         word = word.replaceAll("[^\\p{ASCII}]", "");
          for (Map.Entry<String, String> entry : STRINGS_THAT_CONVERTER_DOESNT_CATCH.entrySet()) {
-         string = string.replace(entry.getKey(), entry.getValue());
+         word = word.replace(entry.getKey(), entry.getValue());
         }
-         return string;
+         return word;
    }
 }
