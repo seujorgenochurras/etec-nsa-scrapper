@@ -1,6 +1,5 @@
 package org.jhey.nsa.api.commons;
 
-import org.jhey.nsa.api.service.schedule.ScheduleFetcher;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
