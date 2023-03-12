@@ -29,4 +29,17 @@ public class Subject {
       this.id = id;
       return this;
    }
+
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof Subject subject)) return false;
+
+      return getName().equals(subject.getName());
+   }
+
+   @Override
+   public int hashCode() {
+      return getName().hashCode();
+   }
 }

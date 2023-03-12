@@ -4,10 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import org.checkerframework.checker.units.qual.A;
 
 import java.time.LocalDate;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class represents the schedule of the classes of the week
@@ -22,10 +23,6 @@ public class DailySchedule {
    @Column(name = "lookup_date")
    @NotNull
    private LocalDate lookupDate;
-   public LocalDate getLookupWeek() {
-      return lookupDate;
-   }
-
    public DailySchedule setLookupDate(LocalDate lookupDate) {
       this.lookupDate = lookupDate;
       return this;
@@ -34,8 +31,9 @@ public class DailySchedule {
    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dailySchedule", orphanRemoval = true)
    @Valid
    @JsonIgnore
-   private Set<Lesson> lessons = new LinkedHashSet<>();
-   public Set<Lesson> getLessons() {
+   private List<Lesson> lessons = new ArrayList<>();
+
+   public List<Lesson> getLessons() {
       return lessons;
    }
 
@@ -56,11 +54,13 @@ public class DailySchedule {
       if (this == o) return true;
       if (!(o instanceof DailySchedule that)) return false;
 
-      return id == that.id;
+      if (getId() != that.getId()) return false;
+      return getLessons().equals(that.getLessons());
    }
 
    @Override
    public int hashCode() {
-      return (int) (id ^ (id >>> 32));
+      return getLessons() != null ? getLessons().hashCode() : 0;
    }
+
 }

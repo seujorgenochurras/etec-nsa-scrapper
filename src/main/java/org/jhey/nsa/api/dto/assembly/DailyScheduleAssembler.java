@@ -7,6 +7,14 @@ import org.jhey.nsa.api.model.schedule_classes.DailySchedule;
 public final class DailyScheduleAssembler {
 private DailyScheduleAssembler(){}
    public static ScheduleDTO toModel(DailySchedule dailySchedule){
-      return new ScheduleDTO(dailySchedule.getId(), dailySchedule.getLookupDate(), dailySchedule.getLessons());
+      return new ScheduleDTO()
+              .setId(dailySchedule.getId())
+              .setLessons(
+                      dailySchedule.getLessons()
+                              .stream()
+                              .map(LessonAssembler::toModel)
+                              .toList())
+
+              .setLookupDate(dailySchedule.getLookupDate());
    }
 }
