@@ -2,10 +2,9 @@ package org.jhey.nsa.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
-import org.jhey.nsa.api.model.schedule_classes.Lesson;
 
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 public class ScheduleDTO {
 
@@ -15,13 +14,7 @@ public class ScheduleDTO {
    private LocalDate lookupDate;
 
    @JsonProperty("Lessons")
-   private Set<Lesson> lessons;
-
-   public ScheduleDTO(Long id, LocalDate lookupDate, Set<Lesson> lessons) {
-      this.id = id;
-      this.lookupDate = lookupDate;
-      this.lessons = lessons;
-   }
+   private List<LessonDTO> lessons;
 
    public Long getId() {
       return id;
@@ -41,11 +34,11 @@ public class ScheduleDTO {
       return this;
    }
 
-   public Set<Lesson> getLessons() {
+   public List<LessonDTO> getLessons() {
       return lessons;
    }
 
-   public ScheduleDTO setLessons(Set<Lesson> lessons) {
+   public ScheduleDTO setLessons(List<LessonDTO> lessons) {
       this.lessons = lessons;
       return this;
    }

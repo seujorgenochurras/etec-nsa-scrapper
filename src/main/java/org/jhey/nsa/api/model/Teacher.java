@@ -31,4 +31,20 @@ public class Teacher {
    public void setEmail(String email) {
       this.email = email;
    }
+
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof Teacher teacher)) return false;
+
+      if (getName() != null ? !getName().equals(teacher.getName()) : teacher.getName() != null) return false;
+      return getEmail() != null ? getEmail().equals(teacher.getEmail()) : teacher.getEmail() == null;
+   }
+
+   @Override
+   public int hashCode() {
+      int result = getName() != null ? getName().hashCode() : 0;
+      result = 31 * result + (getEmail() != null ? getEmail().hashCode() : 0);
+      return result;
+   }
 }
