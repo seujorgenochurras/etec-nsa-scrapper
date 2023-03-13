@@ -53,9 +53,19 @@ public class DailySchedule {
       if (this == o) return true;
       if (!(o instanceof DailySchedule that)) return false;
 
-      if (getId() != that.getId()) return false;
-      return getLessons().equals(that.getLessons());
+      if (getLookupDate() != null ? !getLookupDate().equals(that.getLookupDate()) : that.getLookupDate() != null)
+         return false;
+      if(areLessonsTheSame(lessons, that.getLessons())) return true;
+      return getLessons() == null && that.getLessons() == null;
    }
+   private boolean areLessonsTheSame(List<Lesson> lessons1, List<Lesson> lessons2){
+      if(lessons1.size() != lessons2.size()) return false;
+      for(int i = 0; i < lessons1.size(); i++){
+         if(!lessons1.get(i).equals(lessons2.get(i))) return false;
+      }
+      return true;
+   }
+
 
    @Override
    public int hashCode() {

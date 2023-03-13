@@ -108,24 +108,20 @@ public class Lesson {
       if (this == o) return true;
       if (!(o instanceof Lesson lesson)) return false;
 
-      if (id != lesson.id) return false;
       if (getTeacher() != null ? !getTeacher().equals(lesson.getTeacher()) : lesson.getTeacher() != null) return false;
-      if (getSubject() != null ? !getSubject().equals(lesson.getSubject()) : lesson.getSubject() != null) return false;
-      if (getDayOfWeek() != null ? !getDayOfWeek().equals(lesson.getDayOfWeek()) : lesson.getDayOfWeek() != null)
-         return false;
-      if (getStartTime() != null ? !getStartTime().equals(lesson.getStartTime()) : lesson.getStartTime() != null)
-         return false;
-      return getPlace() != null ? getPlace().equals(lesson.getPlace()) : lesson.getPlace() == null;
+      if (!getSubject().equals(lesson.getSubject())) return false;
+      if (!getDayOfWeek().equals(lesson.getDayOfWeek())) return false;
+      if (!getStartTime().equals(lesson.getStartTime())) return false;
+      return getPlace().equals(lesson.getPlace());
    }
 
    @Override
    public int hashCode() {
-      int result = (int) (id ^ (id >>> 32));
-      result = 31 * result + (getTeacher() != null ? getTeacher().hashCode() : 0);
-      result = 31 * result + (getSubject() != null ? getSubject().hashCode() : 0);
-      result = 31 * result + (getDayOfWeek() != null ? getDayOfWeek().hashCode() : 0);
-      result = 31 * result + (getStartTime() != null ? getStartTime().hashCode() : 0);
-      result = 31 * result + (getPlace() != null ? getPlace().hashCode() : 0);
+      int result = getTeacher() != null ? getTeacher().hashCode() : 0;
+      result = 31 * result + getSubject().hashCode();
+      result = 31 * result + getDayOfWeek().hashCode();
+      result = 31 * result + getStartTime().hashCode();
+      result = 31 * result + getPlace().hashCode();
       return result;
    }
 }
