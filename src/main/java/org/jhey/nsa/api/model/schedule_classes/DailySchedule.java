@@ -53,8 +53,6 @@ public class DailySchedule {
       if (this == o) return true;
       if (!(o instanceof DailySchedule that)) return false;
 
-      if (getLookupDate() != null ? !getLookupDate().equals(that.getLookupDate()) : that.getLookupDate() != null)
-         return false;
       if(areLessonsTheSame(lessons, that.getLessons())) return true;
       return getLessons() == null && that.getLessons() == null;
    }
