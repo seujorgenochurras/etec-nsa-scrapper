@@ -37,3 +37,4 @@ build/
 .env
 .gradle
 gradle
+src/drive/ngrok.exe

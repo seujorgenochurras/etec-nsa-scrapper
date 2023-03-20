@@ -32,6 +32,8 @@ public class Requester {
 
          //Need to parse because of Brazil chars such as "ç~éà"
          Document document = Jsoup.parse(new String(connection.execute().bodyAsBytes()), "UTF-8");
+
+        //need to check this because sometimes the NSA website doesnt let me login with this token
          if(!document.body().getElementsByClass("MsoNormal").isEmpty()) {
             sleep(110); //This is used just to prevent some StackOverFlow Errors
             return getSchedulePage();

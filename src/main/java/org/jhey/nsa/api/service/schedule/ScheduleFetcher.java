@@ -7,6 +7,7 @@ import org.jhey.nsa.request.Requester;
 import org.jhey.nsa.request.Transcriber;
 import org.jhey.nsa.selenium.pages.LoginPage;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
@@ -22,16 +23,19 @@ public class ScheduleFetcher {
    private DailyScheduleService dailyScheduleService;
 
    private DailySchedule fetchSchedule() {
-      ChromeDriver chromeDriver = new ChromeDriver();
-
+      ChromeDriver chromeDriver = setupChromeDriver();
       chromeDriver.get(Dotenv.load().get("SCHOOL_URL"));
-
       LoginPage loginPage = new LoginPage(chromeDriver);
 
       Requester requester = new Requester(loginPage.login());
       DailySchedule dailySchedule = transcriber.transcribe(requester.getSchedulePage());
       chromeDriver.quit();
       return dailySchedule;
+   }
+
+   private ChromeDriver setupChromeDriver(){
+      ChromeOptions options = new ChromeOptions().addArguments("--remote-allow-origins=*");
+      return new ChromeDriver(options);
    }
 
    @Async
