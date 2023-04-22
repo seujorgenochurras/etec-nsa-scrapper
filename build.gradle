@@ -13,12 +13,12 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.seleniumhq.selenium:selenium-java:4.8.0'
+    implementation 'org.seleniumhq.selenium:selenium-java:4.8.1'
     implementation 'io.github.cdimascio:dotenv-java:2.3.2'
     implementation 'com.google.code.gson:gson:2.10.1'
-
-    implementation 'org.jhey:selenium-captcha-breaker:1.0.0'
-    implementation 'org.jhey:selenium-custom-elements:1.0.0'
+    implementation 'io.github.seujorgenochurras:selenium-captcha-breaker:1.2.0'
+    implementation 'io.github.seujorgenochurras:selenium-custom-elements:0.1.0'
+    implementation 'io.github.seujorgenochurras:etec-nsa-scrapper-lib:0.2.0'
 
     implementation 'org.jsoup:jsoup:1.15.4'
     implementation 'com.google.code.gson:gson:2.10.1'
@@ -32,9 +32,9 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 
-    runtimeOnly 'mysql:mysql-connector-java:8.0.22'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    runtimeOnly 'mysql:mysql-connector-java:8.0.32'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
 }
 
 test {

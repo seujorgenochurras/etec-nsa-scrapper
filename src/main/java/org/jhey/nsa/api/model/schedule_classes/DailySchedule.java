@@ -30,7 +30,7 @@ public class DailySchedule {
    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dailySchedule", orphanRemoval = true)
    @Valid
    @JsonIgnore
-   private List<Lesson> lessons = new ArrayList<>();
+   private final List<Lesson> lessons = new ArrayList<>();
 
    public List<Lesson> getLessons() {
       return lessons;

@@ -38,7 +38,7 @@ public class DailyScheduleService {
 
    @Transactional
    public DailySchedule checkAndGetLatestSchedule(){
-      new Thread(() -> applicationContextUtils.getBean(ScheduleFetcher.class).fetch()).start();
+      new Thread(() -> applicationContextUtils.getBean(ScheduleFetcher.class).fetchAndSaveIfFoundFreshSchedule()).start();
       return getLatestSchedule();
 
    }

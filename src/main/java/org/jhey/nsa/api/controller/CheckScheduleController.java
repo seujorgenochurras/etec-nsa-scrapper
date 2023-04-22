@@ -1,6 +1,5 @@
 package org.jhey.nsa.api.controller;
 
-import jakarta.annotation.Nullable;
 import org.jhey.nsa.api.dto.ScheduleDTO;
 import org.jhey.nsa.api.dto.assembly.DailyScheduleAssembler;
 import org.jhey.nsa.api.model.schedule_classes.DailySchedule;
@@ -20,11 +19,13 @@ public class CheckScheduleController {
 
    @PostMapping
    public ResponseEntity<ScheduleDTO> checkLatestSchedule(
-         @RequestBody @Nullable Long id){
-      if(Objects.isNull(id)) id = -1L;
+         @RequestBody(required = false) Long requestScheduleId){
+
+      if(Objects.isNull(requestScheduleId)) requestScheduleId = -1L;
+
       DailySchedule latestSchedule = dailyScheduleService.checkAndGetLatestSchedule();
 
-      if(latestSchedule.getId() == id){
+      if(latestSchedule.getId() == requestScheduleId){
          return ResponseEntity.noContent().build();
       }
        return ResponseEntity.ok(DailyScheduleAssembler.toModel(latestSchedule));
