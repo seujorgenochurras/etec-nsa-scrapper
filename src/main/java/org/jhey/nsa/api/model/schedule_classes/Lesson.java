@@ -53,7 +53,7 @@ public class Lesson {
     * From A1 to I5
     * Where letter = startTime
     * and number = day of the week
-    * */
+    */
    @Column(name = "place")
    private String place;
 
@@ -64,7 +64,7 @@ public class Lesson {
    public Lesson setPlace(PositionMapping place) {
       this.place = place.toString();
       this.dayOfWeek = place.getDayOfWeek().name();
-      this.startTime = place.getStartTime(); //For some reason the db
+      this.startTime = place.getStartTime();
       return this;
    }
 

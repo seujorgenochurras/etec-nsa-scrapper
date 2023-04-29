@@ -25,33 +25,36 @@ public class ScheduleFetcher {
    private DailyScheduleService dailyScheduleService;
 
    private DailySchedule fetchSchedule() {
-
       NsaSession nsaSession = createNsaSession();
       return transcriber.transcribe(nsaSession.getScheduleTimetableDocument());
    }
-   private NsaSession createNsaSession(){
-      Dotenv dotenv = Dotenv.load();
+
+   private NsaSession createNsaSession() {
       ChromeDriver chromeDriver = setupChromeDriver();
-      chromeDriver.get(dotenv.get("SCHOOL_URL"));
+      chromeDriver.get(getStringFromDotEnv("SCHOOL_URL"));
 
       StudentCredentials credentials = getStudentCredentials();
-      final String assemblyAiToken = dotenv.get("ASSEMBLYAI_TOKEN");
+      final String assemblyAiToken = getStringFromDotEnv("ASSEMBLYAI_TOKEN");
 
       NsaSession session = NsaLogin.login(LoginWith.credentials(credentials, assemblyAiToken, chromeDriver));
       chromeDriver.quit();
       return session;
    }
-   private StudentCredentials getStudentCredentials(){
+   private String getStringFromDotEnv(String string){
       Dotenv dotenv = Dotenv.load();
+      return dotenv.get(string);
+   }
 
-      final String etecId = dotenv.get("ETEC_ID");
-      final String rm = dotenv.get("ETEC_USER_ID");
-      final String password = dotenv.get("ETEC_PASS");
+   private StudentCredentials getStudentCredentials() {
+
+      final String etecId = getStringFromDotEnv("ETEC_ID");
+      final String rm = getStringFromDotEnv("ETEC_USER_ID");
+      final String password = getStringFromDotEnv("ETEC_PASS");
 
       return new StudentCredentials(etecId, rm, password);
    }
 
-   private ChromeDriver setupChromeDriver(){
+   private ChromeDriver setupChromeDriver() {
       ChromeOptions options = new ChromeOptions().addArguments("--remote-allow-origins=*"); //needed to fix a common bug among new chromeDriver versions (112.0)
       return new ChromeDriver(options);
    }
@@ -60,6 +63,7 @@ public class ScheduleFetcher {
    @Transactional
    public void fetchAndSaveIfFoundFreshSchedule() {
       DailySchedule freshSchedule = fetchSchedule();
+
       if (dailyScheduleService.isLatestSchedule(freshSchedule)) {
          dailyScheduleService.save(freshSchedule);
       }

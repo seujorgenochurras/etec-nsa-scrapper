@@ -28,8 +28,8 @@ public class DailyScheduleService {
    @Autowired
    private ApplicationContextUtils applicationContextUtils;
 
-   public boolean isLatestSchedule(DailySchedule dailySchedule){
-      if(Objects.isNull(scheduleRepository.findFirstByOrderByIdDesc())){
+   public boolean isLatestSchedule(DailySchedule dailySchedule) {
+      if (Objects.isNull(scheduleRepository.findFirstByOrderByIdDesc())) {
          System.out.println("Object is null");
          return true;
       }
@@ -37,25 +37,27 @@ public class DailyScheduleService {
    }
 
    @Transactional
-   public DailySchedule checkAndGetLatestSchedule(){
+   public DailySchedule checkAndGetLatestSchedule() {
       new Thread(() -> applicationContextUtils.getBean(ScheduleFetcher.class).fetchAndSaveIfFoundFreshSchedule()).start();
       return getLatestSchedule();
 
    }
-   public DailySchedule getLatestSchedule(){
+
+   public DailySchedule getLatestSchedule() {
       DailySchedule latestSchedule = scheduleRepository.findFirstByOrderByIdDesc();
       return Objects.isNull(latestSchedule) ? new DailySchedule() : latestSchedule;
    }
 
    @Transactional
-   public DailySchedule save(@Valid DailySchedule dailySchedule){
+   public DailySchedule save(@Valid DailySchedule dailySchedule) {
       return scheduleRepository.save(dailySchedule);
    }
 
    public DailySchedule findById(long id) {
       return scheduleRepository.findById(id).orElseThrow(() -> new NotFoundException("Schedule not found"));
    }
-   static{
+
+   static {
       System.setProperty("webdriver.chrome.driver", "src/drive/chromedriver.exe");
    }
 }

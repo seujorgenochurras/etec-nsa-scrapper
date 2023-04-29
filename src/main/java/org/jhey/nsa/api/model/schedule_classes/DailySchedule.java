@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * This class represents the schedule of the classes of the week
- * */
+ */
 @Entity
 @Table(name = "week_schedule")
 public class DailySchedule {
@@ -22,6 +22,7 @@ public class DailySchedule {
    @Column(name = "lookup_date")
    @NotNull
    private LocalDate lookupDate;
+
    public DailySchedule setLookupDate(LocalDate lookupDate) {
       this.lookupDate = lookupDate;
       return this;
@@ -36,7 +37,7 @@ public class DailySchedule {
       return lessons;
    }
 
-   public void addLesson(Lesson lesson){
+   public void addLesson(Lesson lesson) {
       lessons.add(lesson);
    }
 
@@ -53,13 +54,14 @@ public class DailySchedule {
       if (this == o) return true;
       if (!(o instanceof DailySchedule that)) return false;
 
-      if(areLessonsTheSame(lessons, that.getLessons())) return true;
+      if (areLessonsTheSame(lessons, that.getLessons())) return true;
       return getLessons() == null && that.getLessons() == null;
    }
-   private boolean areLessonsTheSame(List<Lesson> lessons1, List<Lesson> lessons2){
-      if(lessons1.size() != lessons2.size()) return false;
-      for(int i = 0; i < lessons1.size(); i++){
-         if(!lessons1.get(i).equals(lessons2.get(i))) return false;
+
+   private boolean areLessonsTheSame(List<Lesson> lessons1, List<Lesson> lessons2) {
+      if (lessons1.size() != lessons2.size()) return false;
+      for (int i = 0; i < lessons1.size(); i++) {
+         if (!lessons1.get(i).equals(lessons2.get(i))) return false;
       }
       return true;
    }

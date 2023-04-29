@@ -19,16 +19,16 @@ public class CheckScheduleController {
 
    @PostMapping
    public ResponseEntity<ScheduleDTO> checkLatestSchedule(
-         @RequestBody(required = false) Long requestScheduleId){
+           @RequestBody(required = false) Long requestScheduleId) {
 
-      if(Objects.isNull(requestScheduleId)) requestScheduleId = -1L;
+      if (Objects.isNull(requestScheduleId)) requestScheduleId = -1L;
 
       DailySchedule latestSchedule = dailyScheduleService.checkAndGetLatestSchedule();
 
-      if(latestSchedule.getId() == requestScheduleId){
+      if (latestSchedule.getId() == requestScheduleId) {
          return ResponseEntity.noContent().build();
       }
-       return ResponseEntity.ok(DailyScheduleAssembler.toModel(latestSchedule));
+      return ResponseEntity.ok(DailyScheduleAssembler.toModel(latestSchedule));
 
    }
 }

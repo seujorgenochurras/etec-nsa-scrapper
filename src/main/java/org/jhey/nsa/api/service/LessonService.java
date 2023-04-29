@@ -13,7 +13,7 @@ public class LessonService {
    private LessonRepository lessonRepository;
 
    @Transactional
-   public Lesson save(Lesson lesson){
+   public Lesson save(Lesson lesson) {
       return lessonRepository.save(lesson);
    }
 }

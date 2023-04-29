@@ -23,10 +23,11 @@ public class Transcriber {
    @Autowired
    private SubjectService subjectService;
 
-   private Elements getSchedulesTableRows(Document document){
+   private Elements getSchedulesTableRows(Document document) {
       Element scheduleTable = document.selectXpath("//*[@id=\"ctl00_ContentPlaceHolder1_gvHorario\"]/tbody").first();
       return scheduleTable.getElementsByTag("tr").next();
    }
+
    public DailySchedule transcribe(Document document) {
       Elements schedulesTableRows = getSchedulesTableRows(document);
 
@@ -41,46 +42,49 @@ public class Transcriber {
          tableData.forEach(data -> {
 
             ElementIdentifiers elementIdentifiers = getWhatElementIsIdentifying(data);
-            if(elementIdentifiers.equals(ElementIdentifiers.SUBJECT)
-                    || elementIdentifiers.equals(ElementIdentifiers.CANCELLED_CLASS)){
+            if (elementIdentifiers.equals(ElementIdentifiers.SUBJECT)
+                    || elementIdentifiers.equals(ElementIdentifiers.CANCELLED_CLASS)) {
 
                lesson.getAndSet(new Lesson()
                        .setPlace(PositionMapping.getByIndex(atomicInteger.getAndIncrement()))
                        .setSubject(subjectService.getSubjectByName(data.text())));
 
-               if(elementIdentifiers.equals(ElementIdentifiers.CANCELLED_CLASS)){
+               if (elementIdentifiers.equals(ElementIdentifiers.CANCELLED_CLASS)) {
                   lesson.get().setTeacher(null);
 
                }
                lesson.get().setDailySchedule(dailySchedule);
                dailySchedule.addLesson(lesson.get());
-            }
-
-            else {
+            } else {
                lesson.get().setTeacher(teacherService.getTeacherByName(data.text()));
-             }
+            }
          });
       });
       return dailySchedule;
    }
-   private ElementIdentifiers getWhatElementIsIdentifying(Element element){
+
+   private ElementIdentifiers getWhatElementIsIdentifying(Element element) {
       if (isElementIdentifyingCancelledClass(element)) return ElementIdentifiers.CANCELLED_CLASS;
       if (isElementIdentifyingASubject(element)) return ElementIdentifiers.SUBJECT;
       if (isElementIdentifyingATeacher(element)) return ElementIdentifiers.TEACHER;
       return null;
    }
-   private boolean isElementIdentifyingCancelledClass(Element element){
+
+   private boolean isElementIdentifyingCancelledClass(Element element) {
       return element.tagName().equals("span") && element.text().startsWith("Sem aula no hor");
    }
-   private boolean isElementIdentifyingATeacher(Element element){
+
+   private boolean isElementIdentifyingATeacher(Element element) {
       return !isElementIdentifyingASubject(element) && element.tagName().equals("span");
    }
-   private boolean isElementIdentifyingASubject(Element element){
-      return  element.tagName().equals("a");
+
+   private boolean isElementIdentifyingASubject(Element element) {
+      return element.tagName().equals("a");
    }
-    private enum ElementIdentifiers {
-       TEACHER,
-       SUBJECT,
-       CANCELLED_CLASS
+
+   private enum ElementIdentifiers {
+      TEACHER,
+      SUBJECT,
+      CANCELLED_CLASS
    }
 }

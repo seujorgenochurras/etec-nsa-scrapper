@@ -13,11 +13,12 @@ public class ApplicationContextUtils implements ApplicationContextAware {
    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
       ApplicationContextUtils.applicationContext = applicationContext;
    }
-   public static ApplicationContext getApplicationContext(){
+
+   public static ApplicationContext getApplicationContext() {
       return applicationContext;
    }
 
-   public <T> T getBean(Class<T> tClass ) {
+   public <T> T getBean(Class<T> tClass) {
       return getApplicationContext().getBean(tClass);
    }
 }
